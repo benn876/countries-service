@@ -1,19 +1,30 @@
 package org.fasttrackit.countriesservice.model;
 
-import lombok.Builder;
-import lombok.With;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Builder(toBuilder = true)
 @With
-public record Country(
-        String id,
-        String name,
-        String capital,
-        Integer population,
-        Integer area,
-        String continent,
-        List<String> neighbours
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Country {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column
+    private String name;
+    @Column
+    private String capital;
+    @Column
+    private Integer population;
+    @Column
+    private Integer area;
+    @Column
+    private String continent;
+    @Transient
+    private List<String> neighbours;
 }

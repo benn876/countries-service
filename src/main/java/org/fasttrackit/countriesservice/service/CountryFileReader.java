@@ -32,7 +32,6 @@ public class CountryFileReader implements FileReader {
     private Country lineToCountry(String line) {
         String[] countryParts = line.split("\\|");
         return Country.builder()
-                .id(UUID.randomUUID().toString())
                 .name(countryParts[0])
                 .capital(countryParts[1])
                 .population(valueOf(countryParts[2]))
