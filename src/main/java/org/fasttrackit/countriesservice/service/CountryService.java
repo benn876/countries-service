@@ -1,7 +1,9 @@
 package org.fasttrackit.countriesservice.service;
 
 import org.fasttrackit.countriesservice.exceptions.ResourceNotFoundException;
+import org.fasttrackit.countriesservice.model.City;
 import org.fasttrackit.countriesservice.model.Country;
+import org.fasttrackit.countriesservice.model.filter.CountryFilter;
 import org.fasttrackit.countriesservice.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,30 +18,13 @@ public class CountryService {
         repository.saveAll(countryFileReader.populateWithDataFromFile());
     }
 
-    public List<Country> getAllCountries() {
-        return repository.findAll();
-    }
-
-    public List<Country> getCountriesInContinentWithPopulationBiggerThan(String continent, Integer population) {
-        if (continent == null || population == null) {
-            throw new RuntimeException();
+    public List<Country> getAllCountries(CountryFilter filter) {
+        if (filter == null) {
+            return repository.findAll();
         }
-        return repository.findAll().stream()
-                .filter(country -> continent.equals(country.getContinent()))
-                .filter(country -> country.getPopulation() > population)
-                .toList();
+        return repository.findFilterAll(filter.continent(), filter.population());
     }
 
-    public List<Country> getCountriesByContinent(String continent) {
-        return repository.findByContinentQuery(continent);
-    }
-
-    public List<Country> getCountriesByNeighbours(String includedNeighbour, String excludedNeighbour) {
-        return repository.findAll().stream()
-                .filter(country -> country.getNeighbours().size() > 1)
-                .filter(country -> country.getNeighbours().contains(includedNeighbour) && !country.getNeighbours().contains(excludedNeighbour))
-                .toList();
-    }
 
     public Country getById(String id) {
         return repository.findById(Long.valueOf(id))
@@ -69,5 +54,20 @@ public class CountryService {
                 .build();
         repository.save(updatedCountry);
         return updatedCountry;
+    }
+
+    public Country addCityToCountry(String id, City city) {
+        Country country = getById(id);
+        country.getCities().stream().count();
+        country.getCities().add(city);
+        return repository.save(country);
+    }
+
+    public Country addNeighbourToCountry(String id, String neighbourId) {
+        Country country = getById(id);
+        Country neighbour = getById(neighbourId);
+        country.getNeighboursCountries().add(neighbour);
+        neighbour.getNeighboursCountries().add(country);
+        return repository.save(country);
     }
 }

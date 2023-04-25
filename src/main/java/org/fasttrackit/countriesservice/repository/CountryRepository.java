@@ -15,6 +15,7 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     @Query("select c from Country c where c.continent=:conti")
     List<Country> findByContinentQuery(@Param("conti") String continent);
 
-//    @Query(value = "SELECT * from COUNTRY WHERE continent=:continent", nativeQuery = true)
-//    List<Country> findByContinentQueryNative(@Param(":continent") String continent);
+    @Query("select c from Country c where (c.continent=:continent or :continent is null ) " +
+            "and (c.population>= :population or :population is null)")
+    List<Country> findFilterAll(String continent, Integer population);
 }

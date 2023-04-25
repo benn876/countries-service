@@ -1,5 +1,6 @@
 package org.fasttrackit.countriesservice.service;
 
+import org.fasttrackit.countriesservice.model.City;
 import org.fasttrackit.countriesservice.model.Country;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static java.lang.Integer.valueOf;
 import static java.util.stream.Collectors.toList;
@@ -31,9 +31,13 @@ public class CountryFileReader implements FileReader {
 
     private Country lineToCountry(String line) {
         String[] countryParts = line.split("\\|");
+        City capital = City.builder()
+                .name(countryParts[1])
+                .build();
         return Country.builder()
                 .name(countryParts[0])
-                .capital(countryParts[1])
+                .capital(capital)
+                .cities(List.of(capital))
                 .population(valueOf(countryParts[2]))
                 .area(valueOf(countryParts[3]))
                 .continent(countryParts[4])
