@@ -47,13 +47,15 @@ public class CountryService {
         Country updatedCountry = foundCountry.toBuilder()
                 .id(foundCountry.getId())
                 .name(replaceCountry.getName())
-                .capital(replaceCountry.getCapital())
+                .capital(City.builder()
+                        .name(replaceCountry.getCapital().getName())
+                        .id(foundCountry.getCapital().getId())
+                        .build())
                 .area(replaceCountry.getArea())
                 .population(replaceCountry.getPopulation())
                 .neighbours(replaceCountry.getNeighbours())
                 .build();
-        repository.save(updatedCountry);
-        return updatedCountry;
+      return repository.save(updatedCountry);
     }
 
     public Country addCityToCountry(String id, City city) {

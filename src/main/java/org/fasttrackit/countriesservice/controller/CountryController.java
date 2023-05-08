@@ -18,9 +18,9 @@ import static org.fasttrackit.countriesservice.model.dto.CountryMapper.toEntity;
 @RequestMapping("countries") // http://localhost:8080/countries
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(value = "http://localhost:4200")
 public class CountryController {
     private final CountryService service;
-    private final CountryMapper mapper;
 
     @GetMapping// http://localhost:8080/countries
     public List<CountryDTO> getAllCountries(CountryFilter filter) {

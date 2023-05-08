@@ -1,5 +1,6 @@
 package org.fasttrackit.countriesservice.model.dto;
 
+import org.fasttrackit.countriesservice.model.City;
 import org.fasttrackit.countriesservice.model.Country;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,9 @@ public class CountryMapper {
         return Country.builder()
                 .population(countryDTO.population())
                 .continent(countryDTO.continent())
+                .capital(City.builder()
+                        .name(countryDTO.capital().getName())
+                        .build())
                 .name(countryDTO.name())
                 .neighbours(countryDTO.neighbours())
                 .build();
